@@ -9,7 +9,7 @@ class ThirdGameViewController: UIViewController {
     
 
     let buttonWidth = 90
-    let buttonHeight = 45
+    let buttonHeight = 35
     
     let delta: Double = 35
     let animationDuration = 0.14
@@ -39,8 +39,8 @@ class ThirdGameViewController: UIViewController {
         view.addSubview(topButton)
         
         topButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(50)
-            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-20)
+            make.left.equalToSuperview().offset(5)
             make.width.equalTo(buttonWidth)
             make.height.equalTo(buttonHeight)
         }
@@ -58,7 +58,7 @@ class ThirdGameViewController: UIViewController {
         
         let bottomButton = createButton(title: "Bottom")
         bottomButton.addAction(UIAction(handler: {_ in
-            if self.y >= self.screenSize.height - self.tabBarController!.tabBar.frame.size.height - self.circleSize {
+            if self.y >= self.screenSize.height - self.tabBarController!.tabBar.frame.size.height - self.circleSize - Double(self.buttonHeight) - 20 {
                 return
             }
             self.y += self.delta
@@ -71,7 +71,7 @@ class ThirdGameViewController: UIViewController {
         
         bottomButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-20)
-            make.centerX.equalToSuperview()
+            make.left.equalTo(topButton).offset(buttonWidth + 15)
             make.width.equalTo(buttonWidth)
             make.height.equalTo(buttonHeight)
         }
@@ -92,8 +92,8 @@ class ThirdGameViewController: UIViewController {
         view.addSubview(leftButton)
         
         leftButton.snp.makeConstraints { make in
-            make.centerY.equalToSuperview().offset(circleSize / 2)
-            make.left.equalToSuperview().offset(5)
+            make.bottom.equalToSuperview().offset(-20)
+            make.left.equalTo(bottomButton).offset(buttonWidth + 15)
             make.width.equalTo(buttonWidth)
             make.height.equalTo(buttonHeight)
         }
@@ -112,8 +112,8 @@ class ThirdGameViewController: UIViewController {
         view.addSubview(rightButton)
         
         rightButton.snp.makeConstraints { make in
-            make.centerY.equalToSuperview().offset(circleSize / 2)
-            make.right.equalToSuperview().offset(-5)
+            make.bottom.equalToSuperview().offset(-20)
+            make.left.equalTo(leftButton).offset(buttonWidth + 15)
             make.width.equalTo(buttonWidth)
             make.height.equalTo(buttonHeight)
         }

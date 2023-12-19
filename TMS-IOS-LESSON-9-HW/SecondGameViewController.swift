@@ -1,13 +1,15 @@
 import UIKit
 
 class SecondGameViewController: UIViewController {
-    let size = 120
+    let size = 56
     
     let squaresLimit = 3
     
     let screenSize: CGRect = UIScreen.main.bounds
     
     var tabbarHeight: CGFloat = 0.0
+    
+    var resetMode = false
     
     var button: UIButton = {
         let button = UIButton()
@@ -30,7 +32,14 @@ class SecondGameViewController: UIViewController {
         tabbarHeight = tabBarController?.tabBar.frame.size.height ?? 0;
         
         button.addAction(UIAction(handler: {_ in
-            self.setup()
+            if !self.resetMode {
+                self.setup()
+                self.button.setTitle("Clear", for: .normal)
+            } else {
+                self.reset()
+                self.button.setTitle("Start", for: .normal)
+            }
+            self.resetMode = !self.resetMode
         }), for: .touchUpInside)
         
         self.view.addSubview(button)
@@ -43,25 +52,41 @@ class SecondGameViewController: UIViewController {
     }
     
     private func setup() {
-        for _ in 0..<squaresLimit {
+        let onePart = (Int(screenSize.height) - self.size - Int(self.tabbarHeight) - 100) / squaresLimit;
+   
+        for index in (0..<squaresLimit).indices {
+            let yMin = onePart * (index) + (size);
+            let yMax = onePart * (index + 1) + (index == squaresLimit - 1 ? 0 : size / 2)
+        
             let x = Int.random(in: 0...(Int(screenSize.width) - self.size))
-            let y = Int.random(in: 50...(Int(screenSize.height) - self.size - Int(self.tabbarHeight)))
-            let element  = createSquare();
+            let y = Int.random(in: yMin...yMax)
+            
+            let element  = createSquare(tag: index + 1);
             
             element.frame = CGRect(x: x, y: y, width: size, height: size)
-            
+
             self.view.addSubview(element)
         }
     }
     
-    private func createSquare() -> UIView {
+    private func reset() {
+        for index in (0..<squaresLimit).indices {
+            let square = self.view.viewWithTag(index + 1)!
+            
+            square.removeFromSuperview()
+        }
+    }
+    
+    private func createSquare(tag: Int) -> UIView {
         return  {
             let square = UIView()
             square.backgroundColor = UIColor.random()
+            square.layer.cornerRadius = 8
             square.layer.shadowColor = UIColor.black.cgColor
             square.layer.shadowOpacity = 0.5
             square.layer.shadowOffset = .zero
             square.layer.shadowRadius = 8
+            square.tag = tag
             return square
         }()
     }
